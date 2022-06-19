@@ -34,21 +34,19 @@ class Owner(commands.Cog):
 
         if extension in extensions:
             return extension
-        else:
-            if matches := (
+        if matches := (
                 [entry for entry in extensions if extension in entry] or
                 difflib.get_close_matches(extension, extensions)
             ):
-                return matches[0]
-            else:
-                shortened_exts = [entry.split('.')[-1].lower() for entry in extensions]
+            return matches[0]
+        shortened_exts = [entry.split('.')[-1].lower() for entry in extensions]
 
-                if extension in shortened_exts:
-                    return extensions[shortened_exts.index(extension)]
-                elif matches := difflib.get_close_matches(extension, shortened_exts):
-                    return extensions[shortened_exts.index(matches[0])]
-                else:
-                    return None
+        if extension in shortened_exts:
+            return extensions[shortened_exts.index(extension)]
+        elif matches := difflib.get_close_matches(extension, shortened_exts):
+            return extensions[shortened_exts.index(matches[0])]
+        else:
+            return None
 
     @commands.command(name='fstop', aliases=('fs',))
     async def run_fstop(self, ctx: BombContext, *, code: codeblock_converter) -> None:
@@ -74,33 +72,27 @@ class Owner(commands.Cog):
 
     @commands.command(name='load')
     async def load(self, ctx: BombContext, *, extension: str) -> None:
-        abs_extension = self.get_extension(extension, ctx.bot.all_extensions)
-
-        if not abs_extension:
-            await ctx.send(f'No extension or (similar extensions to {extension}) found')
-        else:
+        if abs_extension := self.get_extension(extension, ctx.bot.all_extensions):
             await ctx.bot.load_extension(abs_extension)
             await ctx.send(f'`➡️ {abs_extension}` loaded successfully')
+        else:
+            await ctx.send(f'No extension or (similar extensions to {extension}) found')
 
     @commands.command(name='unload')
     async def unload(self, ctx: BombContext, *, extension: str) -> None:
-        abs_extension = self.get_extension(extension)
-
-        if not abs_extension:
-            await ctx.send(f'No extension or (similar extensions to {extension}) found')
-        else:
+        if abs_extension := self.get_extension(extension):
             await ctx.bot.unload_extension(abs_extension)
             await ctx.send(f'`⬅️ {abs_extension}` unloaded successfully')
+        else:
+            await ctx.send(f'No extension or (similar extensions to {extension}) found')
 
     @commands.command(name='reload')
     async def reload(self, ctx: BombContext, *, extension: str) -> None:
-        abs_extension = self.get_extension(extension)
-
-        if not abs_extension:
-            await ctx.send(f'No extension or (similar extensions to {extension}) found')
-        else:
+        if abs_extension := self.get_extension(extension):
             await ctx.bot.reload_extension(abs_extension)
             await ctx.send(f'`🔁 {abs_extension}` reloaded successfully')
+        else:
+            await ctx.send(f'No extension or (similar extensions to {extension}) found')
 
 async def setup(bot: BombBot) -> None:
     await bot.add_cog(Owner(bot))

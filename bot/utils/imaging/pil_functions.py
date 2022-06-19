@@ -275,7 +275,7 @@ def image_info(ctx: BombContext, source: BytesIO) -> tuple[discord.Embed, discor
 
     try:
         return embed, thumbnail, palette_img
-    except (NameError, UnboundLocalError):
+    except NameError:
         return embed, thumbnail
 
 @pil_image(width=300)

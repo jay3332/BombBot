@@ -221,8 +221,7 @@ class BombBot(commands.Bot):
         async with self.session.post(MYSTBIN_URL, data=payload) as r:
             if r.ok:
                 data = await r.json()
-                paste = 'https://mystb.in/' + data['pastes'][0]['id']
-                return paste
+                return 'https://mystb.in/' + data['pastes'][0]['id']
 
     async def get_default_emoji(self, emoji: str, *, svg: bool = True) -> Optional[bytes]:
         try:
@@ -237,10 +236,7 @@ class BombBot(commands.Bot):
             async with self.session.get(url) as r:
                 if r.ok:
                     byt = await r.read()
-                    if svg:
-                        return await svg_to_png(byt)
-                    else:
-                        return byt
+                    return await svg_to_png(byt) if svg else byt
         except Exception:
             return None
 
@@ -275,7 +271,7 @@ class BombBot(commands.Bot):
             return await ctx.send(f"input value for `{error.param.name}` must be either ({'or'.join(error.literals)}) or nothing")
 
         elif isinstance(error, discord.HTTPException) and error.status == 413:
-            return await ctx.send(f'Woops, the outputted image was too large :(')
+            return await ctx.send('Woops, the outputted image was too large :(')
 
         elif isinstance(error, commands.MemberNotFound):
             return await ctx.send(f'Member: `{error.argument}` could not be found')

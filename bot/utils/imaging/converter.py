@@ -202,14 +202,14 @@ class ImageConverter(commands.Converter):
         if source is None:
             source = await self.get_attachments(ctx)
 
-            if (ref := ctx.message.reference) and source is None:
-                ref = ref.resolved
+        if (ref := ctx.message.reference) and source is None:
+            ref = ref.resolved
 
-                if not isinstance(ref, discord.DeletedReferencedMessage) and ref:
-                    source = await self.get_attachments(ctx, ref)
+            if not isinstance(ref, discord.DeletedReferencedMessage) and ref:
+                source = await self.get_attachments(ctx, ref)
 
-                    if source is None and ref.content:
-                        source = await self.convert(ctx, ref.content.split()[0], raise_on_failure=False)
+                if source is None and ref.content:
+                    source = await self.convert(ctx, ref.content.split()[0], raise_on_failure=False)
 
         if source is None:
             source = await ctx.author.display_avatar.read()
