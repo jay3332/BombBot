@@ -551,8 +551,7 @@ async def do_command(
     load: bool = True,
     **kwargs: Any,
 ) -> None:
-    if load:
-        async with ctx.loading():
-            return await _do_command_body(ctx, image, func=func, **kwargs)
-    else:
+    if not load:
+        return await _do_command_body(ctx, image, func=func, **kwargs)
+    async with ctx.loading():
         return await _do_command_body(ctx, image, func=func, **kwargs)

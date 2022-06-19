@@ -14,10 +14,7 @@ class BaseImageException(Exception):
     message: str
 
     def __str__(self) -> str:
-        if hasattr(self, 'message'):
-            return self.message
-        else:
-            return str(super())
+        return self.message if hasattr(self, 'message') else str(super())
 
 class TooManyFrames(BaseImageException):
 

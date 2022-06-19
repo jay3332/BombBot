@@ -41,14 +41,13 @@ class BombContext(commands.Context['BombBot']):
         view = ConfirmView(user, timeout=timeout)
         view.message = msg = await self.send(content=message, view=view)
 
-        if await view.wait():
-            await msg.edit(
-                content=f'Looks like {user.mention} did not respond.',
-                allowed_mentions=discord.AllowedMentions.none()
-            )
-            return False
-        else:
+        if not await view.wait():
             return view.value
+        await msg.edit(
+            content=f'Looks like {user.mention} did not respond.',
+            allowed_mentions=discord.AllowedMentions.none()
+        )
+        return False
 
     def loading(self) -> Loading:
         return Loading(self)

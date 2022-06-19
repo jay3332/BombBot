@@ -104,8 +104,7 @@ def lego_speed(_, img: np.ndarray, *, size: int = 40) -> np.ndarray:
     img = cv2.resize(img, (w * 30, h * 30), interpolation=cv2.INTER_NEAREST)
 
     base = np.tile(LEGO, [h, w, 1])
-    blended = cv2.addWeighted(img, 0.7, base, 0.6, 0)
-    return blended
+    return cv2.addWeighted(img, 0.7, base, 0.6, 0)
 
 @pil_image(width=400, process_all_frames=False)
 @to_array('RGBA', cv2.COLOR_RGBA2BGRA)
@@ -149,8 +148,7 @@ def cartoon(_, img: np.ndarray) -> np.ndarray:
     gray = cv2.medianBlur(gray, 5)
     edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9)
     color = cv2.bilateralFilter(img, 9, 250, 250)
-    cartoon = cv2.bitwise_and(color, color, mask=edges)
-    return cartoon
+    return cv2.bitwise_and(color, color, mask=edges)
 
 @pil_image()
 @to_array('RGBA', cv2.COLOR_RGBA2BGRA)
@@ -163,8 +161,7 @@ def colordetect(_, img: np.ndarray, *, color: Color, fuzz: int = 15) -> np.ndarr
 
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv_img, lower_hsv, upper_hsv)
-    output = cv2.bitwise_and(img, img, mask=mask)
-    return output
+    return cv2.bitwise_and(img, img, mask=mask)
 
 @pil_image(width=400)
 @to_array('RGBA', cv2.COLOR_RGBA2BGRA)

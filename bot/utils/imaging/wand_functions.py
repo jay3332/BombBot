@@ -368,7 +368,7 @@ def magik(_, img: Image, *, static: bool = False) -> Image:
         return img
     else:
         base = Image()
-        for i in range(2, 10, 1):
+        for i in range(2, 10):
             with img.clone() as clone:
                 clone.liquid_rescale(img.width // 2, img.height // 2, i, i)
                 clone.dispose = 'background'

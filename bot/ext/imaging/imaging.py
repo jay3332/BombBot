@@ -48,9 +48,7 @@ class Imaging(commands.Cog):
         cooldown = self._cooldown.get_bucket(ctx.message)
         if not cooldown:
             return True
-        retry_after = cooldown.update_rate_limit()
-
-        if retry_after:
+        if retry_after := cooldown.update_rate_limit():
             raise commands.CommandOnCooldown(cooldown, retry_after, commands.BucketType.user)
         return True
 
